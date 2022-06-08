@@ -1,0 +1,18 @@
+projects:
+  mysite:
+    schemaPath: amplify/backend/api/mysite/build/schema.graphql
+    includes:
+      - amplify/backend/api/mysite/schema.graphql
+    excludes:
+      - ./amplify/**
+    extensions:
+      amplify:
+        codeGenTarget: typescript
+        generatedFileName: src/API.ts
+        docsFilePath: amplify/backend/api/mysite
+        region: ap-northeast-1
+        apiId: null
+        maxDepth: 2
+extensions:
+  amplify:
+    version: 3

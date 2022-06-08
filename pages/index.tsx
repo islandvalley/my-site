@@ -1,9 +1,60 @@
+import { useState, useEffect } from 'react'
+import { Amplify, API } from 'aws-amplify';
+import awsExports from '../src/aws-exports';
+Amplify.configure(awsExports);
+
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
+import * as queries from '../amplify/backend/api/mysite/queries';
+import * as mutations from '../amplify/backend/api/mysite/mutations';
+
+const articlesDetails = {
+  content: 'hello world! ' + new Date(),
+  title: 'TITLE!',
+  datetime: '1970-01-01T07:00:00.000Z',
+};
+
 const Home: NextPage = () => {
+  const [articles, setArticles] = useState([])
+  const [selectedId, setSelectedId] = useState<string>('')
+  const [updateValue, setUpdateValue] = useState<string>('')
+
+  useEffect(() => {
+    fetchArticles()
+    getArticle()
+  }, [])
+
+  async function getArticle() {
+    const oneTodo = await API.graphql({ query: queries.getArticles, variables: { id: "8c0c13ca-8f26-49f5-a8f0-a09230441de7" }});
+  }
+
+  async function fetchArticles() {
+    try {
+      const articles: any = await API.graphql({ query: queries.listArticles })
+      const items = articles.data.listArticles.items
+      setArticles(items)
+    } catch (err) { console.log('error fetching todos') }
+  }
+
+  async function createArticle() {
+    await API.graphql({ query: mutations.createArticles, variables: {input: articlesDetails }});
+  }
+
+  async function updateArticle() {
+    await API.graphql({ query: mutations.updateArticles, variables: {input: { id: selectedId, content: updateValue } }});
+  };
+
+  async function deleteArticle() {
+    await API.graphql({ query: mutations.deleteArticles, variables: {input: { id: selectedId } }});
+  };
+
+  function onCheckItem(id: string) {
+    setSelectedId(id)
+  }
+
   return (
     <div className={styles.container}>
       <Head>
@@ -17,39 +68,37 @@ const Home: NextPage = () => {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.tsx</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h2>Documentation &rarr;</h2>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h2>Learn &rarr;</h2>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className={styles.card}
-          >
-            <h2>Examples &rarr;</h2>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h2>Deploy &rarr;</h2>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+        <table className={styles["list-table"]}>
+          <tbody>
+            <tr>
+              <th>選択</th>
+              <th>id</th>
+              <th>title</th>
+              <th>content</th>
+            </tr>
+            {articles.map((article: any, key) => {
+              return (
+                <tr key={key}>
+                  <td><input type="radio" name="input" onClick={() => onCheckItem(article.id)} /></td>
+                  <td>{article.id}</td>
+                  <td>{article.title}</td>
+                  <td>{article.content}</td>
+                </tr>
+              )
+            })}
+          </tbody>
+        </table>
+        <div className={styles["button-block"]}>
+          <div>
+            <button type="button" onClick={createArticle}>投稿！</button>
+          </div>
+          <div>
+            <input type="text" id="update-text" value={updateValue} onChange={e => setUpdateValue(e.target.value)} />
+            <button type="button" onClick={updateArticle}>更新！</button>
+          </div>
+          <div>
+            <button type="button" onClick={deleteArticle}>削除！</button>
+          </div>
         </div>
       </main>
 

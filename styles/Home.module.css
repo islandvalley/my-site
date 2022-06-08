@@ -114,3 +114,13 @@
     flex-direction: column;
   }
 }
+
+.list-table {
+  width: 800px;
+}
+
+.button-block {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

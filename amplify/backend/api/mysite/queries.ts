@@ -7,7 +7,13 @@ export const getArticles = /* GraphQL */ `
     getArticles(id: $id) {
       id
       title
+      datetime
       content
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -21,8 +27,16 @@ export const listArticles = /* GraphQL */ `
       items {
         id
         title
+        datetime
         content
+        createdAt
+        updatedAt
+        _version
+        _deleted
+        _lastChangedAt
       }
+      nextToken
+      startedAt
     }
   }
 `;

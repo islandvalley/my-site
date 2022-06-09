@@ -12,6 +12,11 @@ export const createArticles = /* GraphQL */ `
       title
       datetime
       content
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -22,7 +27,14 @@ export const updateArticles = /* GraphQL */ `
   ) {
     updateArticles(input: $input, condition: $condition) {
       id
+      title
+      datetime
       content
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;
@@ -33,6 +45,14 @@ export const deleteArticles = /* GraphQL */ `
   ) {
     deleteArticles(input: $input, condition: $condition) {
       id
+      title
+      datetime
+      content
+      createdAt
+      updatedAt
+      _version
+      _deleted
+      _lastChangedAt
     }
   }
 `;

@@ -1,21 +1,21 @@
 import { useState, useEffect } from 'react'
-import { Amplify, API } from 'aws-amplify';
-import awsExports from '../src/aws-exports';
-Amplify.configure(awsExports);
+import { Amplify, API } from 'aws-amplify'
+import awsExports from '../src/aws-exports'
+Amplify.configure(awsExports)
 
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
 import styles from '../styles/Home.module.css'
 
-import * as queries from '../amplify/backend/api/mysite/queries';
-import * as mutations from '../amplify/backend/api/mysite/mutations';
+import * as queries from '../amplify/backend/api/mysite/queries'
+import * as mutations from '../amplify/backend/api/mysite/mutations'
 
 const articlesDetails = {
   content: 'hello world! ' + new Date(),
   title: 'TITLE!',
   datetime: '1970-01-01T07:00:00.000Z',
-};
+}
 
 const Home: NextPage = () => {
   const [articles, setArticles] = useState([])
@@ -28,7 +28,10 @@ const Home: NextPage = () => {
   }, [])
 
   async function getArticle() {
-    const oneTodo = await API.graphql({ query: queries.getArticles, variables: { id: "8c0c13ca-8f26-49f5-a8f0-a09230441de7" }});
+    const oneTodo = await API.graphql({
+      query: queries.getArticles,
+      variables: { id: '8c0c13ca-8f26-49f5-a8f0-a09230441de7' },
+    })
   }
 
   async function fetchArticles() {
@@ -36,20 +39,31 @@ const Home: NextPage = () => {
       const articles: any = await API.graphql({ query: queries.listArticles })
       const items = articles.data.listArticles.items
       setArticles(items)
-    } catch (err) { console.log('error fetching todos') }
+    } catch (err) {
+      console.log('error fetching todos')
+    }
   }
 
   async function createArticle() {
-    await API.graphql({ query: mutations.createArticles, variables: {input: articlesDetails }});
+    await API.graphql({
+      query: mutations.createArticles,
+      variables: { input: articlesDetails },
+    })
   }
 
   async function updateArticle() {
-    await API.graphql({ query: mutations.updateArticles, variables: {input: { id: selectedId, content: updateValue } }});
-  };
+    await API.graphql({
+      query: mutations.updateArticles,
+      variables: { input: { id: selectedId, content: updateValue } },
+    })
+  }
 
   async function deleteArticle() {
-    await API.graphql({ query: mutations.deleteArticles, variables: {input: { id: selectedId } }});
-  };
+    await API.graphql({
+      query: mutations.deleteArticles,
+      variables: { input: { id: selectedId } },
+    })
+  }
 
   function onCheckItem(id: string) {
     setSelectedId(id)
@@ -68,7 +82,7 @@ const Home: NextPage = () => {
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
 
-        <table className={styles["list-table"]}>
+        <table className={styles['list-table']}>
           <tbody>
             <tr>
               <th>選択</th>
@@ -79,7 +93,13 @@ const Home: NextPage = () => {
             {articles.map((article: any, key) => {
               return (
                 <tr key={key}>
-                  <td><input type="radio" name="input" onClick={() => onCheckItem(article.id)} /></td>
+                  <td>
+                    <input
+                      type="radio"
+                      name="input"
+                      onClick={() => onCheckItem(article.id)}
+                    />
+                  </td>
                   <td>{article.id}</td>
                   <td>{article.title}</td>
                   <td>{article.content}</td>
@@ -88,16 +108,27 @@ const Home: NextPage = () => {
             })}
           </tbody>
         </table>
-        <div className={styles["button-block"]}>
+        <div className={styles['button-block']}>
           <div>
-            <button type="button" onClick={createArticle}>投稿！</button>
+            <button type="button" onClick={createArticle}>
+              投稿！
+            </button>
           </div>
           <div>
-            <input type="text" id="update-text" value={updateValue} onChange={e => setUpdateValue(e.target.value)} />
-            <button type="button" onClick={updateArticle}>更新！</button>
+            <input
+              type="text"
+              id="update-text"
+              value={updateValue}
+              onChange={(e) => setUpdateValue(e.target.value)}
+            />
+            <button type="button" onClick={updateArticle}>
+              更新！
+            </button>
           </div>
           <div>
-            <button type="button" onClick={deleteArticle}>削除！</button>
+            <button type="button" onClick={deleteArticle}>
+              削除！
+            </button>
           </div>
         </div>
       </main>

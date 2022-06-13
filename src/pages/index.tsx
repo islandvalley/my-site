@@ -1,15 +1,15 @@
 import { useState, useEffect } from 'react'
 import { Amplify, API } from 'aws-amplify'
-import awsExports from '../src/aws-exports'
+import awsExports from '../../amplify/aws-exports'
 Amplify.configure(awsExports)
 
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import styles from '../styles/Home.module.css'
+import styles from '../../styles/Home.module.css'
 
-import * as queries from '../amplify/backend/api/mysite/queries'
-import * as mutations from '../amplify/backend/api/mysite/mutations'
+import * as queries from '../../amplify/backend/api/mysite/queries'
+import * as mutations from '../../amplify/backend/api/mysite/mutations'
 
 const articlesDetails = {
   content: 'hello world! ' + new Date(),
@@ -61,7 +61,7 @@ const Home: NextPage = () => {
   async function deleteArticle() {
     await API.graphql({
       query: mutations.deleteArticles,
-      variables: { input: { id: selectedId } },
+      variables: { input: { id: selectedId, _version: 5 } },
     })
   }
 

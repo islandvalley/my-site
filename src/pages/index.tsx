@@ -10,6 +10,7 @@ import styles from '../styles/Home.module.css'
 
 import * as queries from '../../amplify/backend/api/mysite/queries'
 import * as mutations from '../../amplify/backend/api/mysite/mutations'
+import { Button } from '../components/atoms/Button'
 
 const articlesDetails = {
   content: 'hello world! ' + new Date(),
@@ -81,7 +82,7 @@ const Home: NextPage = () => {
         <h1 className={styles.title}>
           Welcome to <a href="https://nextjs.org">Next.js!</a>
         </h1>
-
+        <Button>hello world</Button>
         <table className={styles['list-table']}>
           <tbody>
             <tr>
